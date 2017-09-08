@@ -24,23 +24,23 @@ public class ClientContext {
         gamePanel.getChessInfo().clearFlicker();
 
         if (ComputerThink.judgeTriumph(x, y, gamePanel.getChessInfo().getChessboard(),
-                ChessInfo.ISUSER)) {
+                ChessInfo.CHESS_USER)) {
             System.out.println("winner");
             JOptionPane.showMessageDialog(chessFrame, "you winner!!");
             gamePanel.getChessInfo().clear();
-            gamePanel.setIsStarted();
+            gamePanel.gameEnd();
             gamePanel.setIsUserStep();
             return;
         }
 
         int[] locationPoint = ComputerThink.judgeSituation(gamePanel.getChessInfo().getChessboard());
-        gamePanel.getChessInfo().getChessboard()[locationPoint[0]][locationPoint[1]] = ChessInfo.ISCOMPUTER;
+        gamePanel.getChessInfo().getChessboard()[locationPoint[0]][locationPoint[1]] = ChessInfo.CHESS_COMPUTER;
 
         if (ComputerThink.judgeTriumph(locationPoint[0], locationPoint[1],
-                gamePanel.getChessInfo().getChessboard(), ChessInfo.ISCOMPUTER)) {
+                gamePanel.getChessInfo().getChessboard(), ChessInfo.CHESS_COMPUTER)) {
             JOptionPane.showMessageDialog(chessFrame, "game over...!");
             gamePanel.getChessInfo().clear();
-            gamePanel.setIsStarted();
+            gamePanel.gameEnd();
             gamePanel.setIsUserStep();
             return;
         }
@@ -60,7 +60,7 @@ public class ClientContext {
             if (value == JOptionPane.YES_OPTION) {
                 JOptionPane.showMessageDialog(chessFrame, "restart");
                 gamePanel.getChessInfo().clear();
-                gamePanel.setIsStarted();
+                gamePanel.gameEnd();
                 return true;
             } else {
                 return false;
@@ -73,6 +73,6 @@ public class ClientContext {
 
     void help() {
         int[] location = ComputerThink.judgeSituation(gamePanel.getChessInfo().getChessboard());
-        gamePanel.getChessInfo().getChessboard()[location[0]][location[1]] = ChessInfo.ISHELP;
+        gamePanel.getChessInfo().getChessboard()[location[0]][location[1]] = ChessInfo.CHESS_HELP;
     }
 }

@@ -2,8 +2,30 @@ package entity;
 
 import java.util.Arrays;
 
+/**
+ * 已经输了
+ * _ o o o o _
+ * <p>
+ * 再不拦截就输了
+ * o o o _ o
+ * 1 o o o o
+ * _ o o _ o _
+ * _ o o o _
+ * <p>
+ * 再走一步则必须拦截
+ * 1 o o o
+ * 1 o o _ o
+ * _ o o _
+ * 1 _ o o o _ 1
+ * <p>
+ * 再走2步必须拦截
+ * 1 o o
+ * _ o _
+ * <p>
+ * 无论怎么走都不需要拦截
+ * 1 o o o _ 1  内部不满5格
+ */
 public class ComputerThink {
-
 
     public static boolean judgeTriumph(int x, int y, int[][] chessboard, int isUserOrIsComputer) {
         System.out.println("chessServiceImplement Method " +
@@ -19,7 +41,7 @@ public class ComputerThink {
                 && chessboard[x][coordsY] == isUserOrIsComputer; coordsY++) {
             serialChessCount++;
         }
-        if ((serialChessCount - 1) >= ChessInfo.SERIAL_CHESS_NUMBER) {
+        if ((serialChessCount - 1) >= 5) {
             IsTriumph = true;
         }
 
@@ -32,7 +54,7 @@ public class ComputerThink {
                 && chessboard[coordsX][y] == isUserOrIsComputer; coordsX++) {
             serialChessCount++;
         }
-        if ((serialChessCount - 1) >= ChessInfo.SERIAL_CHESS_NUMBER) {
+        if ((serialChessCount - 1) >= 5) {
             IsTriumph = true;
         }
 
@@ -45,7 +67,7 @@ public class ComputerThink {
                 && coordsY < ChessInfo.CHESS_BOARD_SIZE && chessboard[coordsX][coordsY] == isUserOrIsComputer; coordsX++, coordsY++) {
             serialChessCount++;
         }
-        if ((serialChessCount - 1) >= ChessInfo.SERIAL_CHESS_NUMBER) {
+        if ((serialChessCount - 1) >= 5) {
             IsTriumph = true;
         }
 
@@ -58,7 +80,7 @@ public class ComputerThink {
                 && coordsY >= 0 && chessboard[coordsX][coordsY] == isUserOrIsComputer; coordsX++, coordsY--) {
             serialChessCount++;
         }
-        if ((serialChessCount - 1) >= ChessInfo.SERIAL_CHESS_NUMBER) {
+        if ((serialChessCount - 1) >= 5) {
             IsTriumph = true;
         }
         System.out.println("------------------------------------------------------------");
@@ -67,9 +89,9 @@ public class ComputerThink {
     }
 
     public static int[] judgeSituation(int[][] chessboard) {
-        int[] userSituation = getSituation(chessboard, ChessInfo.ISUSER);
+        int[] userSituation = getSituation(chessboard, ChessInfo.CHESS_USER);
         System.out.println("userSituation:\t\t" + Arrays.toString(userSituation));
-        int[] computerSituation = getSituation(chessboard, ChessInfo.ISCOMPUTER);
+        int[] computerSituation = getSituation(chessboard, ChessInfo.CHESS_COMPUTER);
         System.out.println("computerSituation:\t\t" + Arrays.toString(computerSituation));
         if (userSituation[0] > computerSituation[0]) {
             System.out.println("user is tailwind! computer decide disturb user!");
@@ -149,7 +171,7 @@ public class ComputerThink {
                 && coordsY < ChessInfo.CHESS_BOARD_SIZE && chessboard[coordsX][coordsY] != -isUserOrComputer; coordsX -= I_increment, coordsY -= J_increment) {
             maxRange++;
         }
-        if (--maxRange < ChessInfo.SERIAL_CHESS_NUMBER) {
+        if (--maxRange < 5) {
             System.out.println("judge:\t" + i + ":" + j + "\t(" + I_increment + "," + J_increment + ")" + "\tfalse\t" + maxRange);
             situation[1] = i;
             situation[2] = j;
@@ -171,7 +193,7 @@ public class ComputerThink {
             for (int coordsX = i, coordsY = j; coordsX >= 0 && coordsY >= 0 && coordsX < ChessInfo.CHESS_BOARD_SIZE
                     && coordsY < ChessInfo.CHESS_BOARD_SIZE && chessboard[coordsX][coordsY] == isUserOrComputer; coordsX += I_increment, coordsY += J_increment) {
                 if (coordsX + I_increment >= 0 && coordsY + J_increment >= 0 && coordsX + I_increment < ChessInfo.CHESS_BOARD_SIZE && coordsY + J_increment < ChessInfo.CHESS_BOARD_SIZE) {
-                    if (chessboard[coordsX + I_increment][coordsY + J_increment] == ChessInfo.ISNULL || chessboard[coordsX + I_increment][coordsY + J_increment] == ChessInfo.ISHELP) {
+                    if (chessboard[coordsX + I_increment][coordsY + J_increment] == ChessInfo.CHESS_INIT || chessboard[coordsX + I_increment][coordsY + J_increment] == ChessInfo.CHESS_HELP) {
                         situation[1] = coordsX + I_increment;
                         situation[2] = coordsY + J_increment;
                         isFoundLocation = true;
@@ -186,7 +208,7 @@ public class ComputerThink {
             for (int coordsX = i, coordsY = j; coordsX >= 0 && coordsY >= 0 && coordsX < ChessInfo.CHESS_BOARD_SIZE
                     && coordsY < ChessInfo.CHESS_BOARD_SIZE && chessboard[coordsX][coordsY] == isUserOrComputer; coordsX -= I_increment, coordsY -= J_increment) {
                 if (coordsX - I_increment >= 0 && coordsY - J_increment >= 0 && coordsX - I_increment < ChessInfo.CHESS_BOARD_SIZE && coordsY - J_increment < ChessInfo.CHESS_BOARD_SIZE) {
-                    if ((chessboard[coordsX - I_increment][coordsY - J_increment] == ChessInfo.ISNULL || chessboard[coordsX + I_increment][coordsY + J_increment] == ChessInfo.ISHELP) && !isFoundLocation) {
+                    if ((chessboard[coordsX - I_increment][coordsY - J_increment] == ChessInfo.CHESS_INIT || chessboard[coordsX + I_increment][coordsY + J_increment] == ChessInfo.CHESS_HELP) && !isFoundLocation) {
                         situation[1] = coordsX - I_increment;
                         situation[2] = coordsY - J_increment;
                         break;

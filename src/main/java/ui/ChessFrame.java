@@ -4,6 +4,8 @@ import entity.GamePanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -11,6 +13,9 @@ public class ChessFrame extends JFrame {
 
     private static final long serialVersionUID = -1551250420100406800L;
 
+    /**
+     * 棋子大小,直径
+     */
     public static final int BLOCK_SIZE = 20;
 
     private GamePanel gamePanel;
@@ -31,9 +36,10 @@ public class ChessFrame extends JFrame {
 
     public void launch() {
         System.out.println("start initialize ChessFrame.....");
+
         this.setTitle(">>>>五子棋<<<<");
-        this.setSize(550, 500);
-        this.setContentPane(createcontentPane());
+        this.setSize(400, 350);
+        this.setContentPane(createContentPanel());
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -50,12 +56,12 @@ public class ChessFrame extends JFrame {
         System.out.println("ChessFrame initialize succeed.....");
     }
 
-    private JPanel createcontentPane() {
-        JPanel pane = new JPanel(new BorderLayout());
-        pane.add(BorderLayout.SOUTH, new JLabel("luYun Present, All Right Reserved", JLabel.RIGHT));
-        pane.add(BorderLayout.WEST, createWestPanel());
-        pane.add(BorderLayout.CENTER, gamePanel);
-        return pane;
+    private JPanel createContentPanel() {
+        JPanel p = new JPanel(new BorderLayout());
+        p.add(BorderLayout.SOUTH, new JLabel("人机五子棋", JLabel.RIGHT));
+        p.add(BorderLayout.WEST, createWestPanel());
+        p.add(BorderLayout.CENTER, gamePanel);
+        return p;
     }
 
     private JPanel createWestPanel() {
@@ -69,9 +75,19 @@ public class ChessFrame extends JFrame {
         JButton restart = new JButton("restart");
         JButton help = new JButton("help");
 
-        restart.addActionListener(e -> clientContext.restart());
+        restart.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                clientContext.restart();
+            }
+        });
 
-        help.addActionListener(e -> clientContext.help());
+        help.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                clientContext.help();
+            }
+        });
 
         pane.add(restart);
         pane.add(help);

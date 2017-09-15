@@ -1,12 +1,12 @@
 package ui;
 
-import entity.ChessInfo;
+import consts.PieceType;
 import entity.ComputerThink;
 import entity.GamePanel;
 
 import javax.swing.*;
 
-public class ClientContext {
+public class ClientContext implements PieceType {
 
 
     public void show() {
@@ -19,32 +19,49 @@ public class ClientContext {
         this.chessFrame = chessFrame;
     }
 
+    /**
+     * 玩家落子之后的处理逻辑
+     * 1.判断用户是否胜利,如果用户胜利-> 游戏结束
+     * 2.电脑判断局势,并选择落子
+     * 3.判断电脑是否胜利,如果电脑胜利-> 游戏结束
+     *
+     * @param x 玩家落子X坐标
+     * @param y 玩家落子Y坐标
+     */
     public void gameProcedure(int x, int y) {
 
-        gamePanel.getChessInfo().clearFlicker();
+        gamePanel.getChessInfo().clearHelpTips();
 
-        if (ComputerThink.judgeTriumph(x, y, gamePanel.getChessInfo().getChessboard(),
-                ChessInfo.CHESS_USER)) {
-            System.out.println("winner");
+        /*
+         * 1.判断用户是否胜利,如果用户胜利-> 游戏结束
+         */
+        if (ComputerThink.judgeTriumph(x, y, gamePanel.getChessInfo().getChessboard(), PieceType.USER)) {
             JOptionPane.showMessageDialog(chessFrame, "you winner!!");
-            gamePanel.getChessInfo().clear();
-            gamePanel.gameEnd();
-            gamePanel.setIsUserStep();
+            gameEnd();
             return;
         }
 
-        int[] locationPoint = ComputerThink.judgeSituation(gamePanel.getChessInfo().getChessboard());
-        gamePanel.getChessInfo().getChessboard()[locationPoint[0]][locationPoint[1]] = ChessInfo.CHESS_COMPUTER;
+        /*
+         * 2.电脑判断局势,并选择落子
+         */
+        int[] cp = ComputerThink.judgeSituation(gamePanel.getChessInfo().getChessboard());
+        gamePanel.getChessInfo().getChessboard()[cp[0]][cp[1]] = PieceType.COMPUTER;
 
-        if (ComputerThink.judgeTriumph(locationPoint[0], locationPoint[1],
-                gamePanel.getChessInfo().getChessboard(), ChessInfo.CHESS_COMPUTER)) {
+        /*
+         * 3.判断电脑是否胜利,如果电脑胜利-> 游戏结束
+         */
+        if (ComputerThink.judgeTriumph(cp[0], cp[1], gamePanel.getChessInfo().getChessboard(), PieceType.COMPUTER)) {
             JOptionPane.showMessageDialog(chessFrame, "game over...!");
-            gamePanel.getChessInfo().clear();
-            gamePanel.gameEnd();
-            gamePanel.setIsUserStep();
+            gameEnd();
             return;
         }
 
+        gamePanel.setIsUserStep();
+    }
+
+    private void gameEnd(){
+        gamePanel.getChessInfo().clear();
+        gamePanel.gameEnd();
         gamePanel.setIsUserStep();
     }
 
@@ -73,6 +90,6 @@ public class ClientContext {
 
     void help() {
         int[] location = ComputerThink.judgeSituation(gamePanel.getChessInfo().getChessboard());
-        gamePanel.getChessInfo().getChessboard()[location[0]][location[1]] = ChessInfo.CHESS_HELP;
+        gamePanel.getChessInfo().getChessboard()[location[0]][location[1]] = PieceType.HELP;
     }
 }

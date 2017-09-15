@@ -1,35 +1,25 @@
 package entity;
 
+import consts.PieceType;
+
 import java.util.Arrays;
 
-/**
- * 已经输了
- * _ o o o o _
- * <p>
- * 再不拦截就输了
- * o o o _ o
- * 1 o o o o
- * _ o o _ o _
- * _ o o o _
- * <p>
- * 再走一步则必须拦截
- * 1 o o o
- * 1 o o _ o
- * _ o o _
- * 1 _ o o o _ 1
- * <p>
- * 再走2步必须拦截
- * 1 o o
- * _ o _
- * <p>
- * 无论怎么走都不需要拦截
- * 1 o o o _ 1  内部不满5格
- */
+
 public class ComputerThink {
 
+    /**
+     * 判断是否胜利
+     *
+     * @param x                  落子点x坐标
+     * @param y                  落子点y坐标
+     * @param chessboard         棋盘
+     * @param isUserOrIsComputer 判断谁胜利
+     */
     public static boolean judgeTriumph(int x, int y, int[][] chessboard, int isUserOrIsComputer) {
+
         System.out.println("chessServiceImplement Method " +
                 "judgeTriumph(int x, int y, int[][] chessboard, int isUserOrIsComputer) invoking");
+
         boolean IsTriumph = false;
         int serialChessCount = 0;
 
@@ -89,16 +79,23 @@ public class ComputerThink {
     }
 
     public static int[] judgeSituation(int[][] chessboard) {
-        int[] userSituation = getSituation(chessboard, ChessInfo.CHESS_USER);
+
+        int[] userSituation = getSituation(chessboard, PieceType.USER);
         System.out.println("userSituation:\t\t" + Arrays.toString(userSituation));
-        int[] computerSituation = getSituation(chessboard, ChessInfo.CHESS_COMPUTER);
+
+        int[] computerSituation = getSituation(chessboard, PieceType.COMPUTER);
         System.out.println("computerSituation:\t\t" + Arrays.toString(computerSituation));
+
         if (userSituation[0] > computerSituation[0]) {
+
             System.out.println("user is tailwind! computer decide disturb user!");
             return new int[]{userSituation[1], userSituation[2]};
+
         } else if (userSituation[0] == computerSituation[0] && userSituation[3] == 0 && computerSituation[3] == 2) {
             return new int[]{userSituation[1], userSituation[2]};
+
         } else {
+
             System.out.println("computer is tailwind!");
             return new int[]{computerSituation[1], computerSituation[2]};
         }
@@ -193,7 +190,7 @@ public class ComputerThink {
             for (int coordsX = i, coordsY = j; coordsX >= 0 && coordsY >= 0 && coordsX < ChessInfo.CHESS_BOARD_SIZE
                     && coordsY < ChessInfo.CHESS_BOARD_SIZE && chessboard[coordsX][coordsY] == isUserOrComputer; coordsX += I_increment, coordsY += J_increment) {
                 if (coordsX + I_increment >= 0 && coordsY + J_increment >= 0 && coordsX + I_increment < ChessInfo.CHESS_BOARD_SIZE && coordsY + J_increment < ChessInfo.CHESS_BOARD_SIZE) {
-                    if (chessboard[coordsX + I_increment][coordsY + J_increment] == ChessInfo.CHESS_INIT || chessboard[coordsX + I_increment][coordsY + J_increment] == ChessInfo.CHESS_HELP) {
+                    if (chessboard[coordsX + I_increment][coordsY + J_increment] == PieceType.INIT || chessboard[coordsX + I_increment][coordsY + J_increment] == PieceType.HELP) {
                         situation[1] = coordsX + I_increment;
                         situation[2] = coordsY + J_increment;
                         isFoundLocation = true;
@@ -208,7 +205,7 @@ public class ComputerThink {
             for (int coordsX = i, coordsY = j; coordsX >= 0 && coordsY >= 0 && coordsX < ChessInfo.CHESS_BOARD_SIZE
                     && coordsY < ChessInfo.CHESS_BOARD_SIZE && chessboard[coordsX][coordsY] == isUserOrComputer; coordsX -= I_increment, coordsY -= J_increment) {
                 if (coordsX - I_increment >= 0 && coordsY - J_increment >= 0 && coordsX - I_increment < ChessInfo.CHESS_BOARD_SIZE && coordsY - J_increment < ChessInfo.CHESS_BOARD_SIZE) {
-                    if ((chessboard[coordsX - I_increment][coordsY - J_increment] == ChessInfo.CHESS_INIT || chessboard[coordsX + I_increment][coordsY + J_increment] == ChessInfo.CHESS_HELP) && !isFoundLocation) {
+                    if ((chessboard[coordsX - I_increment][coordsY - J_increment] == PieceType.INIT || chessboard[coordsX + I_increment][coordsY + J_increment] == PieceType.HELP) && !isFoundLocation) {
                         situation[1] = coordsX - I_increment;
                         situation[2] = coordsY - J_increment;
                         break;

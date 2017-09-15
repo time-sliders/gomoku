@@ -1,24 +1,12 @@
 package entity;
 
-public class ChessInfo {
+import consts.PieceType;
 
+public class ChessInfo implements PieceType {
 
-    /**
+    public static final int CHESS_BOARD_SIZE = 15;
 
-     ---------------------------------->
-
-
-
-     */
-
-    static final int CHESS_BOARD_SIZE = 21;
-
-    static final int CHESS_INIT = 0;
-    public static final int CHESS_USER = 1;
-    public static final int CHESS_COMPUTER = 2;
-    public static final int CHESS_HELP = 9;
-
-    private int[][] chessboard = new int[CHESS_BOARD_SIZE][];
+    private int[][] chessboard = new int[CHESS_BOARD_SIZE][CHESS_BOARD_SIZE];
 
     ChessInfo() {
         init();
@@ -28,7 +16,7 @@ public class ChessInfo {
         for (int i = 0; i < CHESS_BOARD_SIZE; i++) {
             chessboard[i] = new int[CHESS_BOARD_SIZE];
             for (int j = 0; j < CHESS_BOARD_SIZE; j++) {
-                chessboard[i][j] = CHESS_INIT;
+                chessboard[i][j] = INIT;
             }
         }
         System.out.println("Array initialize succeed.....");
@@ -37,17 +25,20 @@ public class ChessInfo {
     public void clear() {
         for (int i = 0; i < CHESS_BOARD_SIZE; i++) {
             for (int j = 0; j < CHESS_BOARD_SIZE; j++) {
-                chessboard[i][j] = CHESS_INIT;
+                chessboard[i][j] = INIT;
             }
         }
         System.out.println("Array clear succeed......");
     }
 
-    public void clearFlicker() {
+    /**
+     * 清除掉棋盘上的帮助提示闪烁黄点
+     */
+    public void clearHelpTips() {
         for (int i = 0; i < CHESS_BOARD_SIZE; i++) {
             for (int j = 0; j < CHESS_BOARD_SIZE; j++) {
-                if (chessboard[i][j] == CHESS_HELP) {
-                    chessboard[i][j] = CHESS_INIT;
+                if (chessboard[i][j] == HELP) {
+                    chessboard[i][j] = INIT;
                 }
             }
         }
